@@ -203,7 +203,7 @@ export default function SpacePortfolio() {
       Math.pow(playerPos.x - planet.x, 2) + Math.pow(playerPos.y - planet.y, 2)
     );
     
-    if (distance < 15) {
+    if (distance < 300) {
       setSelectedPlanet(planet);
       if (!discoveredPlanets.has(planet.id)) {
         setDiscoveredPlanets(new Set([...discoveredPlanets, planet.id]));
