@@ -8,9 +8,10 @@ export default function SpacePortfolio() {
   const [score, setScore] = useState(0);
   const [discoveredPlanets, setDiscoveredPlanets] = useState(new Set());
   const [rotation, setRotation] = useState(0);
-  const canvasRef = useRef(null);
   const keysPressed = useRef({});
-  
+  const animationId = useRef(null);
+  const lastTime = useRef(0);
+
   // Portfolio sections as "planets"
   const planets = [
     {
@@ -83,9 +84,7 @@ RANDOM FACTS:
 - [A failure that taught you something]
 - [Why you actually care about this major]
 
-Look, I could tell you I'm "passionate about learning" and "collaborative team player" but you've read that 10,000 times. 
-
-Instead: [something real about why you give a shit about astronomy/physics that isn't just "it's cool"]`
+Look, I could Fac
     },
     {
       id: 'contact',
@@ -131,15 +130,15 @@ P.S. - If you made it this far, thanks for playing my janky space game. I promis
     window.addEventListener('keydown', handleKeyDown);
     window.addEventListener('keyup', handleKeyUp);
 
-    const gameLoop = setInterval(() => {
+    const gameLoop = (time) => {
+      const deltaTime = (time - lastTime.current) / 1000; // Convert to seconds
+      lastTime.current = time;
+
       setPlayerPos(prev => {
-        let newX = prev.x;
-        let newY = prev.y;
         let dx = 0;
         let dy = 0;
-        const speed = 0.5;
+        const speed = 50; // Units per second
 
-        // Check all keys and accumulate direction
         if (keysPressed.current['w'] || keysPressed.current['arrowup']) {
           dy -= 1;
         }
@@ -153,27 +152,39 @@ P.S. - If you made it this far, thanks for playing my janky space game. I promis
           dx += 1;
         }
 
-        // Apply movement
-        newX += dx * speed;
-        newY += dy * speed;
-
-        // Calculate rotation based on movement direction
+        // Normalize diagonal movement
         if (dx !== 0 || dy !== 0) {
-          const angle = Math.atan2(dy, dx) * (180 / Math.PI) + 90 - 45;
-          setRotation(angle);
+          const magnitude = Math.sqrt(dx * dx + dy * dy);
+          dx = (dx / magnitude) * speed * deltaTime;
+          dy = (dy / magnitude) * speed * deltaTime;
+
+          // Smooth rotation
+          const targetAngle = Math.atan2(dy, dx) * (180 / Math.PI) + 45;
+          setRotation(prev => {
+            const diff = targetAngle - prev;
+            const maxRotation = 360 * deltaTime; // Max degrees per second
+            return prev + Math.max(-maxRotation, Math.min(maxRotation, diff));
+          });
         }
 
-        return {
-          x: Math.max(0, Math.min(100, newX)),
-          y: Math.max(0, Math.min(100, newY))
-        };
+        const newX = Math.max(0, Math.min(100, prev.x + dx));
+        const newY = Math.max(0, Math.min(100, prev.y + dy));
+
+        return { x: newX, y: newY };
       });
-    }, 16);
+
+      animationId.current = requestAnimationFrame(gameLoop);
+    };
+
+    lastTime.current = performance.now();
+    animationId.current = requestAnimationFrame(gameLoop);
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('keyup', handleKeyUp);
-      clearInterval(gameLoop);
+      if (animationId.current) {
+        cancelAnimationFrame(animationId.current);
+      }
     };
   }, [gameStarted]);
 
@@ -230,7 +241,6 @@ P.S. - If you made it this far, thanks for playing my janky space game. I promis
 
   return (
     <div className="w-full h-screen bg-black relative overflow-hidden">
-      {/* Stars */}
       {stars.map((star, i) => (
         <div
           key={i}
@@ -245,7 +255,6 @@ P.S. - If you made it this far, thanks for playing my janky space game. I promis
         />
       ))}
 
-      {/* HUD */}
       <div className="absolute top-4 left-4 text-white space-y-2 z-20">
         <div className="bg-black bg-opacity-70 px-4 py-2 rounded">
           <p className="text-sm">PLANETS DISCOVERED: {discoveredPlanets.size}/{planets.length}</p>
@@ -257,7 +266,6 @@ P.S. - If you made it this far, thanks for playing my janky space game. I promis
         </div>
       </div>
 
-      {/* Planets */}
       {planets.map((planet) => {
         const isDiscovered = discoveredPlanets.has(planet.id);
         return (
@@ -293,9 +301,8 @@ P.S. - If you made it this far, thanks for playing my janky space game. I promis
         );
       })}
 
-      {/* Player (Spaceship) */}
       <div
-        className="absolute transform -translate-x-1/2 -translate-y-1/2 transition-all z-10"
+        className="absolute transform -translate-x-1/2 -translate-y-1/2 transition-transform duration-100 z-10"
         style={{
           left: `${playerPos.x}%`,
           top: `${playerPos.y}%`,
@@ -305,7 +312,6 @@ P.S. - If you made it this far, thanks for playing my janky space game. I promis
         <div className="absolute inset-0 bg-blue-400 rounded-full blur-md opacity-50 animate-pulse" />
       </div>
 
-      {/* Planet Info Modal */}
       {selectedPlanet && (
         <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-30 p-4">
           <div className="bg-gray-900 rounded-lg p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto relative border-2"
