@@ -13,8 +13,7 @@ export default function SpacePortfolio() {
   // Audio player states
   const songs = useRef([
     { name: 'Rogue Planets – Soundtrack (2018)', url: 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663084322984/ePPiXJipifYdUONT.mp3' },
-    { name: 'AJR - Finale (Can’t Wait To See What You Do Next)
-', url: 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663084322984/gASqwQdAZGWtFejM.mp3' },
+    { name: 'AJR - Finale (Can’t Wait To See What You Do Next)', url: 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663084322984/gASqwQdAZGWtFejM.mp3' },
     { name: 'Sarcastic Sounds - Dead Dreams', url: 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663084322984/MxPnJGegFEQxriTJ.mp3' },
   ]);
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
