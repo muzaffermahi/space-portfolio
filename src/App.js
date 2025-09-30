@@ -3,7 +3,8 @@ import { Rocket, X } from 'lucide-react';
 
 export default function SpacePortfolio() {
   const [gameStarted, setGameStarted] = useState(false);
-  const [playerPos, setPlayerPos] = useState({ x: 50, y: 50 });
+  const [playerPos, setPlayerPos] = useState({ x: 15, y: 50 }); // Start closer to left edge
+  const [cameraX, setCameraX] = useState(0); // Camera position for horizontal scrolling
   const [selectedPlanet, setSelectedPlanet] = useState(null);
   const [score, setScore] = useState(0);
   const [discoveredPlanets, setDiscoveredPlanets] = useState(new Set());
@@ -12,15 +13,20 @@ export default function SpacePortfolio() {
   // Use refs for smooth movement
   const keysPressed = useRef({});
   const animationId = useRef(null);
-  const playerPosRef = useRef({ x: 50, y: 50 });
+  const playerPosRef = useRef({ x: 15, y: 50 });
+  const cameraXRef = useRef(0);
   const rotationRef = useRef(0);
   const lastFrameTime = useRef(0);
   
-  // Portfolio sections as "planets"
+  // Expanded game world - much wider space (500% of screen width)
+  const WORLD_WIDTH = 500;
+  const SCREEN_WIDTH = 100;
+  
+  // Portfolio sections as "planets" - spread across the expanded world
   const planets = [
     {
       id: 'intro',
-      x: 20,
+      x: 20, // Earth in the first frame
       y: 30,
       size: 60,
       color: '#4A90E2',
@@ -36,7 +42,7 @@ Navigate with WASD or arrows. Click planets to discover my work. Or just fly aro
     },
     {
       id: 'projects',
-      x: 70,
+      x: 150, // Far to the right - requires exploration
       y: 25,
       size: 50,
       color: '#E74C3C',
@@ -55,7 +61,7 @@ Replace this with YOUR actual projects. Make them stories, not bullet points. Ad
     },
     {
       id: 'research',
-      x: 45,
+      x: 280, // Even further right
       y: 60,
       size: 55,
       color: '#9B59B6',
@@ -74,8 +80,8 @@ If you don't have formal research, put what you're CURIOUS about. Genuine curios
     },
     {
       id: 'about',
-      x: 85,
-      y: 70,
+      x: 380, // Deep space exploration required
+      y: 40,
       size: 45,
       color: '#F39C12',
       name: 'TITAN',
@@ -94,8 +100,8 @@ Instead: [something real about why you give a shit about astronomy/physics that 
     },
     {
       id: 'contact',
-      x: 30,
-      y: 85,
+      x: 450, // At the far edge of the universe
+      y: 70,
       size: 40,
       color: '#1ABC9C',
       name: 'DEEP SPACE',
@@ -113,10 +119,10 @@ P.S. - If you made it this far, thanks for playing my janky space game. I promis
     }
   ];
 
-  // Stars for background
+  // Generate stars across the entire expanded world
   const [stars] = useState(() => {
-    return Array.from({ length: 100 }, () => ({
-      x: Math.random() * 100,
+    return Array.from({ length: 500 }, () => ({
+      x: Math.random() * WORLD_WIDTH,
       y: Math.random() * 100,
       size: Math.random() * 2 + 1
     }));
@@ -146,7 +152,7 @@ P.S. - If you made it this far, thanks for playing my janky space game. I promis
       
       let dx = 0;
       let dy = 0;
-      const baseSpeed = 1.2; // Increased base speed for responsiveness
+      const baseSpeed = 1.2;
       const speed = baseSpeed * normalizedDelta;
 
       // Check all keys and accumulate direction
@@ -180,12 +186,17 @@ P.S. - If you made it this far, thanks for playing my janky space game. I promis
         rotationRef.current = angle;
       }
 
-      // Keep player within bounds
-      playerPosRef.current.x = Math.max(0, Math.min(100, playerPosRef.current.x));
+      // Keep player within expanded world bounds
+      playerPosRef.current.x = Math.max(0, Math.min(WORLD_WIDTH, playerPosRef.current.x));
       playerPosRef.current.y = Math.max(0, Math.min(100, playerPosRef.current.y));
 
-      // Update React state less frequently for better performance
+      // Update camera to follow player with some offset
+      const targetCameraX = playerPosRef.current.x - 30; // Keep player slightly left of center
+      cameraXRef.current = Math.max(0, Math.min(WORLD_WIDTH - SCREEN_WIDTH, targetCameraX));
+
+      // Update React state
       setPlayerPos({ ...playerPosRef.current });
+      setCameraX(cameraXRef.current);
       setRotation(rotationRef.current);
       
       animationId.current = requestAnimationFrame(gameLoop);
@@ -218,10 +229,21 @@ P.S. - If you made it this far, thanks for playing my janky space game. I promis
     }
   };
 
+  // Convert world coordinates to screen coordinates
+  const worldToScreen = (worldX) => {
+    return ((worldX - cameraX) / SCREEN_WIDTH) * 100;
+  };
+
+  // Check if object is visible on screen
+  const isVisible = (worldX, size = 0) => {
+    const screenX = worldToScreen(worldX);
+    return screenX > -size && screenX < 100 + size;
+  };
+
   if (!gameStarted) {
     return (
       <div className="w-full h-screen bg-black flex items-center justify-center relative overflow-hidden">
-        {stars.map((star, i) => (
+        {stars.filter(star => star.x < 100).map((star, i) => (
           <div
             key={i}
             className="absolute bg-white rounded-full animate-pulse"
@@ -239,10 +261,10 @@ P.S. - If you made it this far, thanks for playing my janky space game. I promis
             COSMIC PORTFOLIO
           </h1>
           <p className="text-xl text-gray-300 max-w-2xl mx-auto px-4">
-            Navigate space. Discover my work. Try not to crash into anything.
+            Navigate the vast expanse of space. Discover my work hidden among distant worlds.
           </p>
           <p className="text-sm text-gray-400">
-            Controls: WASD or Arrow Keys to move • Click planets when close to explore
+            Controls: WASD or Arrow Keys to move • Explore right to find planets • Click planets when close
           </p>
           <button
             onClick={() => setGameStarted(true)}
@@ -257,13 +279,13 @@ P.S. - If you made it this far, thanks for playing my janky space game. I promis
 
   return (
     <div className="w-full h-screen bg-black relative overflow-hidden">
-      {/* Stars */}
-      {stars.map((star, i) => (
+      {/* Stars - only render visible ones for performance */}
+      {stars.filter(star => isVisible(star.x, 5)).map((star, i) => (
         <div
           key={i}
           className="absolute bg-white rounded-full"
           style={{
-            left: `${star.x}%`,
+            left: `${worldToScreen(star.x)}%`,
             top: `${star.y}%`,
             width: `${star.size}px`,
             height: `${star.size}px`,
@@ -277,23 +299,40 @@ P.S. - If you made it this far, thanks for playing my janky space game. I promis
         <div className="bg-black bg-opacity-70 px-4 py-2 rounded">
           <p className="text-sm">PLANETS DISCOVERED: {discoveredPlanets.size}/{planets.length}</p>
           <p className="text-sm">POINTS: {score}</p>
+          <p className="text-xs text-gray-400">Position: {Math.round(playerPos.x)}, {Math.round(playerPos.y)}</p>
         </div>
         <div className="bg-black bg-opacity-70 px-4 py-2 rounded text-xs max-w-xs">
           <p>Move with WASD or arrows</p>
+          <p>Explore right to discover planets</p>
           <p>Get close to planets and click them</p>
         </div>
       </div>
 
-      {/* Planets */}
-      {planets.map((planet) => {
+      {/* Progress indicator */}
+      <div className="absolute top-4 right-4 text-white z-20">
+        <div className="bg-black bg-opacity-70 px-4 py-2 rounded">
+          <p className="text-xs text-gray-400 mb-1">EXPLORATION PROGRESS</p>
+          <div className="w-32 h-2 bg-gray-700 rounded">
+            <div 
+              className="h-full bg-blue-500 rounded transition-all duration-300"
+              style={{ width: `${(playerPos.x / WORLD_WIDTH) * 100}%` }}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Planets - only render visible ones */}
+      {planets.filter(planet => isVisible(planet.x, planet.size)).map((planet) => {
         const isDiscovered = discoveredPlanets.has(planet.id);
+        const screenX = worldToScreen(planet.x);
+        
         return (
           <div
             key={planet.id}
             onClick={() => handlePlanetClick(planet)}
             className="absolute cursor-pointer transform transition-transform hover:scale-110"
             style={{
-              left: `${planet.x}%`,
+              left: `${screenX}%`,
               top: `${planet.y}%`,
               width: `${planet.size}px`,
               height: `${planet.size}px`,
@@ -324,7 +363,7 @@ P.S. - If you made it this far, thanks for playing my janky space game. I promis
       <div
         className="absolute transform -translate-x-1/2 -translate-y-1/2 z-10"
         style={{
-          left: `${playerPos.x}%`,
+          left: `${worldToScreen(playerPos.x)}%`,
           top: `${playerPos.y}%`,
         }}
       >
