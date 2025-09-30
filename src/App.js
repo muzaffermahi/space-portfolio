@@ -42,7 +42,7 @@ export default function SpacePortfolio() {
       color: '#4A90E2',
       name: 'EARTH',
       title: 'Start Here',
-      content: `Hey. I'm [YOUR NAME].\n\nAt 13.8 billion years old, the universe has seen some shit. Here's what I've done in my 17 years.\n\nI build things, break things, and stare at the night sky wondering what the hell is out there. This portfolio? It's my way of showing you I'm not just another physics kid with good grades.\n\nNavigate with WASD or arrows. Click planets to discover my work. Or just fly around - I built this in 3 days, what did you expect?`
+      content: `Yolo! I'm Mahi!.\n\nAt 13.8 billion years old, the universe has seen some shit. Here's what I've done in my 17 years.\n\nI build things, break things, and stare at the night sky wondering what the hell is out there. This portfolio? It's my way of showing you I'm not just another physics kid with good grades.\n\nNavigate with WASD or arrows. Click planets to discover my work. Or just fly around - I built this in 3 days, what did you expect?`
     },
     {
       id: 'projects',
