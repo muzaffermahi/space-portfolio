@@ -102,10 +102,10 @@ Instead: [something real about why you give a shit about astronomy/physics that 
       id: 'contact',
       x: 450, // At the far edge of the universe
       y: 70,
-      size: 40,
-      color: '#1ABC9C',
-      name: 'DEEP SPACE',
+      size: 60, // Adjusted size for the image
+      name: 'ME',
       title: 'Let\'s Talk',
+      image: 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663084322984/KRjwkhInksmcbnzV.png',
       content: `EMAIL: your.email@whatever.com
 GITHUB: github.com/yourusername
 [Other links if relevant]
@@ -338,18 +338,27 @@ P.S. - If you made it this far, thanks for playing my janky space game. I promis
               height: `${planet.size}px`,
             }}
           >
-            <div
-              className="w-full h-full rounded-full shadow-lg flex items-center justify-center"
-              style={{
-                backgroundColor: planet.color,
-                boxShadow: `0 0 20px ${planet.color}`,
-                opacity: isDiscovered ? 1 : 0.7
-              }}
-            >
-              <span className="text-white text-xs font-bold text-center px-2">
-                {planet.name}
-              </span>
-            </div>
+            {planet.image ? (
+              <img 
+                src={planet.image} 
+                alt={planet.name} 
+                className="w-full h-full object-contain"
+                style={{ opacity: isDiscovered ? 1 : 0.7 }}
+              />
+            ) : (
+              <div
+                className="w-full h-full rounded-full shadow-lg flex items-center justify-center"
+                style={{
+                  backgroundColor: planet.color,
+                  boxShadow: `0 0 20px ${planet.color}`,
+                  opacity: isDiscovered ? 1 : 0.7
+                }}
+              >
+                <span className="text-white text-xs font-bold text-center px-2">
+                  {planet.name}
+                </span>
+              </div>
+            )}
             {isDiscovered && (
               <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 text-green-400 text-xs whitespace-nowrap">
                 ✓ DISCOVERED
@@ -375,7 +384,7 @@ P.S. - If you made it this far, thanks for playing my janky space game. I promis
       {selectedPlanet && (
         <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-30 p-4">
           <div className="bg-gray-900 rounded-lg p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto relative border-2"
-               style={{ borderColor: selectedPlanet.color }}>
+               style={{ borderColor: selectedPlanet.color || '#1ABC9C' }}>
             <button
               onClick={() => setSelectedPlanet(null)}
               className="absolute top-4 right-4 text-white hover:text-gray-300"
@@ -383,13 +392,22 @@ P.S. - If you made it this far, thanks for playing my janky space game. I promis
               <X className="w-6 h-6" />
             </button>
             <div className="flex items-center gap-4 mb-6">
-              <div
-                className="w-16 h-16 rounded-full"
-                style={{
-                  backgroundColor: selectedPlanet.color,
-                  boxShadow: `0 0 30px ${selectedPlanet.color}`
-                }}
-              />
+              {selectedPlanet.image ? (
+                <img 
+                  src={selectedPlanet.image} 
+                  alt={selectedPlanet.name} 
+                  className="w-16 h-16 object-contain rounded-full"
+                  style={{ boxShadow: `0 0 30px ${selectedPlanet.color || '#1ABC9C'}` }}
+                />
+              ) : (
+                <div
+                  className="w-16 h-16 rounded-full"
+                  style={{
+                    backgroundColor: selectedPlanet.color,
+                    boxShadow: `0 0 30px ${selectedPlanet.color}`
+                  }}
+                />
+              )}
               <div>
                 <h2 className="text-3xl font-bold text-white">{selectedPlanet.name}</h2>
                 <p className="text-gray-400">{selectedPlanet.title}</p>
