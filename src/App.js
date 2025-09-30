@@ -249,8 +249,10 @@ export default function SpacePortfolio() {
             Controls: WASD or Arrow Keys to move • Explore right to find planets • Click planets when close
           </p>
           <button
-            onClick={() => setGameStarted(true)}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-lg text-xl transition-all transform hover:scale-105"
+onClick={() => {
+  setGameStarted(true);
+  audioRef.current.play().catch(e => console.log("Audio blocked:", e));
+}}            className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-lg text-xl transition-all transform hover:scale-105"
           >
             LAUNCH MISSION
           </button>
