@@ -1,15 +1,25 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Rocket, X } from 'lucide-react';
+import { Rocket, X, Music, Pause, Play, SkipForward } from 'lucide-react';
 
 export default function SpacePortfolio() {
   const [gameStarted, setGameStarted] = useState(false);
-  const [playerPos, setPlayerPos] = useState({ x: 15, y: 50 }); // Start closer to left edge
-  const [cameraX, setCameraX] = useState(0); // Camera position for horizontal scrolling
+  const [playerPos, setPlayerPos] = useState({ x: 15, y: 50 });
+  const [cameraX, setCameraX] = useState(0);
   const [selectedPlanet, setSelectedPlanet] = useState(null);
   const [score, setScore] = useState(0);
   const [discoveredPlanets, setDiscoveredPlanets] = useState(new Set());
   const [rotation, setRotation] = useState(0);
   
+  // Audio player states
+  const songs = useRef([
+    { name: 'Song 1', url: 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663084322984/ePPiXJipifYdUONT.mp3' },
+    { name: 'Song 2', url: 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663084322984/gASqwQdAZGWtFejM.mp3' },
+    { name: 'Song 3', url: 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663084322984/MxPnJGegFEQxriTJ.mp3' },
+  ]);
+  const [currentSongIndex, setCurrentSongIndex] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = useRef(new Audio());
+
   // Use refs for smooth movement
   const keysPressed = useRef({});
   const animationId = useRef(null);
@@ -26,96 +36,53 @@ export default function SpacePortfolio() {
   const planets = [
     {
       id: 'intro',
-      x: 20, // Earth in the first frame
+      x: 20,
       y: 30,
       size: 60,
       color: '#4A90E2',
       name: 'EARTH',
       title: 'Start Here',
-      content: `Hey. I'm [YOUR NAME].
-
-At 13.8 billion years old, the universe has seen some shit. Here's what I've done in my 17 years.
-
-I build things, break things, and stare at the night sky wondering what the hell is out there. This portfolio? It's my way of showing you I'm not just another physics kid with good grades.
-
-Navigate with WASD or arrows. Click planets to discover my work. Or just fly around - I built this in 3 days, what did you expect?`
+      content: `Hey. I'm [YOUR NAME].\n\nAt 13.8 billion years old, the universe has seen some shit. Here's what I've done in my 17 years.\n\nI build things, break things, and stare at the night sky wondering what the hell is out there. This portfolio? It's my way of showing you I'm not just another physics kid with good grades.\n\nNavigate with WASD or arrows. Click planets to discover my work. Or just fly around - I built this in 3 days, what did you expect?`
     },
     {
       id: 'projects',
-      x: 150, // Far to the right - requires exploration
+      x: 150,
       y: 25,
       size: 50,
       color: '#E74C3C',
       name: 'MARS',
       title: 'The Work',
-      content: `PROJECT 1: [Your coolest project]
-Built/researched/discovered [thing]. Why it matters: [impact].
-
-PROJECT 2: [Second coolest thing]
-The one where I learned [lesson] the hard way.
-
-PROJECT 3: [Something weird/personal]
-Not everything needs to change the world. Sometimes you just need to know if [random question].
-
-Replace this with YOUR actual projects. Make them stories, not bullet points. Admissions officers are human - bore them and they'll forget you in 10 minutes.`
+      content: `PROJECT 1: [Your coolest project]\nBuilt/researched/discovered [thing]. Why it matters: [impact].\n\nPROJECT 2: [Second coolest thing]\nThe one where I learned [lesson] the hard way.\n\nPROJECT 3: [Something weird/personal]\nNot everything needs to change the world. Sometimes you just need to know if [random question].\n\nReplace this with YOUR actual projects. Make them stories, not bullet points. Admissions officers are human - bore them and they'll forget you in 10 minutes.`
     },
     {
       id: 'research',
-      x: 280, // Even further right
+      x: 280,
       y: 60,
       size: 55,
       color: '#9B59B6',
       name: 'KEPLER-442b',
       title: 'Research & Obsessions',
-      content: `CURRENT OBSESSION: [What you're actually into right now]
-
-PAST WORK:
-- [Research experience if you have it]
-- [Independent projects that aren't school assignments]
-- [That thing you do at 2am because you can't stop thinking about it]
-
-The thing about physics is it's not about memorizing formulas. It's about looking at the universe and asking "but WHY though?" 
-
-If you don't have formal research, put what you're CURIOUS about. Genuine curiosity > fake credentials.`
+      content: `CURRENT OBSESSION: [What you're actually into right now]\n\nPAST WORK:\n- [Research experience if you have it]\n- [Independent projects that aren't school assignments]\n- [That thing you do at 2am because you can't stop thinking about it]\n\nThe thing about physics is it's not about memorizing formulas. It's about looking at the universe and asking "but WHY though?" \n\nIf you don't have formal research, put what you're CURIOUS about. Genuine curiosity > fake credentials.`
     },
     {
       id: 'about',
-      x: 380, // Deep space exploration required
+      x: 380,
       y: 40,
       size: 45,
       color: '#F39C12',
       name: 'TITAN',
       title: 'The Human Bit',
-      content: `WHO I AM WHEN I'M NOT DOING PHYSICS:
-[Actually interesting things about you]
-
-RANDOM FACTS:
-- [Something weird that makes you memorable]
-- [A failure that taught you something]
-- [Why you actually care about this major]
-
-Look, I could tell you I'm "passionate about learning" and "collaborative team player" but you've read that 10,000 times. 
-
-Instead: [something real about why you give a shit about astronomy/physics that isn't just "it's cool"]`
+      content: `WHO I AM WHEN I'M NOT DOING PHYSICS:\n[Actually interesting things about you]\n\nRANDOM FACTS:\n- [Something weird that makes you memorable]\n- [A failure that taught you something]\n- [Why you actually care about this major]\n\nLook, I could tell you I'm "passionate about learning" and "collaborative team player" but you've read that 10,000 times. \n\nInstead: [something real about why you give a shit about astronomy/physics that isn't just "it's cool"]`
     },
     {
       id: 'contact',
-      x: 450, // At the far edge of the universe
+      x: 450,
       y: 70,
-      size: 60, // Adjusted size for the image
+      size: 60,
       name: 'ME',
       title: 'Let\'s Talk',
       image: 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663084322984/KRjwkhInksmcbnzV.png',
-      content: `EMAIL: your.email@whatever.com
-GITHUB: github.com/yourusername
-[Other links if relevant]
-
-Want to talk about exoplanets? Dark matter? Why physics is simultaneously the best and most frustrating thing ever? Hit me up.
-
-Currently working on: [current project/learning]
-Available for: [internships/research/collaboration/whatever]
-
-P.S. - If you made it this far, thanks for playing my janky space game. I promise I'm better at physics than I am at game design.`
+      content: `EMAIL: your.email@whatever.com\nGITHUB: github.com/yourusername\n[Other links if relevant]\n\nWant to talk about exoplanets? Dark matter? Why physics is simultaneously the best and most frustrating thing ever? Hit me up.\n\nCurrently working on: [current project/learning]\nAvailable for: [internships/research/collaboration/whatever]\n\nP.S. - If you made it this far, thanks for playing my janky space game. I promise I'm better at physics than I am at game design.`
     }
   ];
 
@@ -127,6 +94,32 @@ P.S. - If you made it this far, thanks for playing my janky space game. I promis
       size: Math.random() * 2 + 1
     }));
   });
+
+  // Audio player effects
+  useEffect(() => {
+    const audio = audioRef.current;
+    audio.src = songs.current[currentSongIndex].url;
+    audio.loop = true; // Loop the current song
+
+    if (isPlaying) {
+      audio.play().catch(e => console.error("Error playing audio:", e));
+    } else {
+      audio.pause();
+    }
+
+    return () => {
+      audio.pause();
+    };
+  }, [currentSongIndex, isPlaying]);
+
+  const togglePlayPause = () => {
+    setIsPlaying(prev => !prev);
+  };
+
+  const playNextSong = () => {
+    setCurrentSongIndex(prevIndex => (prevIndex + 1) % songs.current.length);
+    setIsPlaying(true); // Automatically play next song
+  };
 
   useEffect(() => {
     if (!gameStarted) return;
@@ -143,11 +136,9 @@ P.S. - If you made it this far, thanks for playing my janky space game. I promis
     window.addEventListener('keyup', handleKeyUp);
 
     const gameLoop = (currentTime) => {
-      // Calculate delta time for frame-rate independent movement
       const deltaTime = currentTime - lastFrameTime.current;
       lastFrameTime.current = currentTime;
       
-      // Normalize delta time (60fps = 16.67ms per frame)
       const normalizedDelta = deltaTime / 16.67;
       
       let dx = 0;
@@ -155,7 +146,6 @@ P.S. - If you made it this far, thanks for playing my janky space game. I promis
       const baseSpeed = 1.2;
       const speed = baseSpeed * normalizedDelta;
 
-      // Check all keys and accumulate direction
       if (keysPressed.current['w'] || keysPressed.current['arrowup']) {
         dy -= 1;
       }
@@ -169,32 +159,26 @@ P.S. - If you made it this far, thanks for playing my janky space game. I promis
         dx += 1;
       }
 
-      // Normalize diagonal movement
       if (dx !== 0 && dy !== 0) {
         const magnitude = Math.sqrt(dx * dx + dy * dy);
         dx = dx / magnitude;
         dy = dy / magnitude;
       }
 
-      // Apply movement to ref
       if (dx !== 0 || dy !== 0) {
         playerPosRef.current.x += dx * speed;
         playerPosRef.current.y += dy * speed;
 
-        // Calculate rotation based on movement direction
         const angle = Math.atan2(dy, dx) * (180 / Math.PI) + 45;
         rotationRef.current = angle;
       }
 
-      // Keep player within expanded world bounds
       playerPosRef.current.x = Math.max(0, Math.min(WORLD_WIDTH, playerPosRef.current.x));
       playerPosRef.current.y = Math.max(0, Math.min(100, playerPosRef.current.y));
 
-      // Update camera to follow player with some offset
-      const targetCameraX = playerPosRef.current.x - 30; // Keep player slightly left of center
+      const targetCameraX = playerPosRef.current.x - 30;
       cameraXRef.current = Math.max(0, Math.min(WORLD_WIDTH - SCREEN_WIDTH, targetCameraX));
 
-      // Update React state
       setPlayerPos({ ...playerPosRef.current });
       setCameraX(cameraXRef.current);
       setRotation(rotationRef.current);
@@ -202,7 +186,6 @@ P.S. - If you made it this far, thanks for playing my janky space game. I promis
       animationId.current = requestAnimationFrame(gameLoop);
     };
     
-    // Initialize the first frame time
     lastFrameTime.current = performance.now();
     animationId.current = requestAnimationFrame(gameLoop);
 
@@ -229,12 +212,10 @@ P.S. - If you made it this far, thanks for playing my janky space game. I promis
     }
   };
 
-  // Convert world coordinates to screen coordinates
   const worldToScreen = (worldX) => {
     return ((worldX - cameraX) / SCREEN_WIDTH) * 100;
   };
 
-  // Check if object is visible on screen
   const isVisible = (worldX, size = 0) => {
     const screenX = worldToScreen(worldX);
     return screenX > -size && screenX < 100 + size;
@@ -305,6 +286,20 @@ P.S. - If you made it this far, thanks for playing my janky space game. I promis
           <p>Move with WASD or arrows</p>
           <p>Explore right to discover planets</p>
           <p>Get close to planets and click them</p>
+        </div>
+      </div>
+
+      {/* Music Player */}
+      <div className="absolute bottom-4 left-4 text-white z-20">
+        <div className="bg-black bg-opacity-70 px-4 py-2 rounded flex items-center space-x-2">
+          <Music className="w-5 h-5" />
+          <span className="text-sm">{songs.current[currentSongIndex].name}</span>
+          <button onClick={togglePlayPause} className="p-1 rounded-full hover:bg-gray-700">
+            {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
+          </button>
+          <button onClick={playNextSong} className="p-1 rounded-full hover:bg-gray-700">
+            <SkipForward className="w-5 h-5" />
+          </button>
         </div>
       </div>
 
