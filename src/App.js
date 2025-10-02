@@ -43,7 +43,7 @@ export default function SpacePortfolio() {
       y: 30,
       size: 60,
       color: '#4A90E2',
-      name: 'EARTH',
+      name: 'HOME',
       title: 'Start Here',
       content: [
         "Yolo! I'm Mahi!",
@@ -58,7 +58,7 @@ export default function SpacePortfolio() {
       y: 25,
       size: 50,
       color: '#E74C3C',
-      name: 'BEGINNING',
+      name: 'Serious',
       title: 'The Work',
       content: [
         "Rogue Planets! I researched what could happen to Earth if one of them got close to Earth with Shrihan Agarwal from the University of Chicago!",
@@ -68,7 +68,7 @@ export default function SpacePortfolio() {
         "Anyways, in the project we found that a rogue planet can be quite dangerous if it approaches from certain angles with certain speeds (Yeah, too vague, check my paper out for more details).",
         "I'm planning on coding a more detailed simulation, so if you're interested, please keep playing!",
         "Sarac Rocketry - The school club where I learned I couldn't code for 48+ hours with 2 hours of sleep and a nuclear amount of caffeine.",
-        "But we did send 15 kilogram engineering marvels up 1500 meters and land them safely, sooo...",
+        "But we did send engineering marvels up 2700 meters at mach 0.7 and land them safely, sooo...",
         "I believe knowledge should be free, regardless of language. That's why I used to spend a lot of time translating Wikipedia pages from English to Turkish.",
         "Because guess what, the most beautiful Solar System object (psst Iapetus) didn't have a wikipedia page in Turkish, let alone any information about it in the forums.",
         "So, if you want to contribute to free-knowledge and you happen to know 2 languages, just translate wiki pages.",
@@ -85,10 +85,10 @@ export default function SpacePortfolio() {
       title: 'More free knowledge',
       content: [
         "indextr.com",
-        "I started this project because the Turkish academia searching websites are mostly old, slow, and has a bad ui.",
-        "But even worse, they are seperated, so you often need to visit multiple websites to find a simple thing.",
+        "I started this project because the Turkish academic search websites are slow, unreliable, and have a UI straight from the 90's.",
+        "But even worse, they are seperated, so you often need to visit multiple websites to find a simple paper.",
         "That's why I built indextr, a website that merges TRDizin (an academic index for journals), Dergipark (A merged platform for journals), and YokTez (Turkish theses database).",
-        "The project is not done yet, but still open to public. I'm currently improving the search algorithm with AI.",
+        "The project is not done yet, but open to public in beta. I'm currently improving the search algorithm to understand the meaning of the search query, not just words.",
         "That's it about indextr. Check it out!"
       ]
     },
