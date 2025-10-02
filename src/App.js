@@ -406,8 +406,13 @@ onClick={() => {
           <div className="bg-gray-900 rounded-lg p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto relative border-2"
                style={{ borderColor: selectedPlanet.color || '#1ABC9C' }}>
             <button
-              onClick={() => setSelectedPlanet(null)}
-              className="absolute top-4 right-4 text-white hover:text-gray-300"
+onClick={() => {
+  setSelectedPlanet(null);
+  if (textSoundInterval.current) {
+    clearInterval(textSoundInterval.current);
+    textSoundInterval.current = null;
+  }
+}}              className="absolute top-4 right-4 text-white hover:text-gray-300"
             >
               <X className="w-6 h-6" />
             </button>
@@ -437,8 +442,13 @@ onClick={() => {
               {selectedPlanet.content}
             </div>
             <button
-              onClick={() => setSelectedPlanet(null)}
-              className="mt-6 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded"
+onClick={() => {
+  setSelectedPlanet(null);
+  if (textSoundInterval.current) {
+    clearInterval(textSoundInterval.current);
+    textSoundInterval.current = null;
+  }
+}}              className="mt-6 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded"
             >
               Continue Exploring
             </button>
