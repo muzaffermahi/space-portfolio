@@ -14,7 +14,7 @@ export default function SpacePortfolio() {
   const songs = useRef([
     { name: 'Rogue Planets – Soundtrack (2018)', url: 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663084322984/ePPiXJipifYdUONT.mp3' },
     { name: 'AJR - Finale (Can’t Wait To See What You Do Next)', url: 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663084322984/gASqwQdAZGWtFejM.mp3' },
-    { name: 'Sarcastic Sounds - Dead Dreams', url: 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663084322984/MxPnJGegFEQxriTJ.mp3' },
+    { name: 'Sarcastic Sounds - Dead Dreams (My favourite!)', url: 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663084322984/MxPnJGegFEQxriTJ.mp3' },
   ]);
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -42,7 +42,7 @@ export default function SpacePortfolio() {
       color: '#4A90E2',
       name: 'EARTH',
       title: 'Start Here',
-      content: `Yolo! I'm Mahi!.\n\nAt 13.8 billion years old, the universe has seen some shit. Here's what I've done in my 17 years.\n\nI build things, break things, and stare at the night sky wondering what the hell is out there. This portfolio? It's my way of showing you I'm not just another physics kid with good grades.\n\nNavigate with WASD or arrows. Click planets to discover my work. Or just fly around - I built this in 3 days, what did you expect?`
+      content: `Yolo! I'm Mahi!.\n\nThis is the beginning of my journey.\n\nI build things, break things, and stare at the night sky wondering what the hell is out there.\n\nNavigate with WASD or arrows. Click planets to discover my work. Or just fly around - I built this in 3 days, what did you expect?`
     },
     {
       id: 'projects',
@@ -50,9 +50,9 @@ export default function SpacePortfolio() {
       y: 25,
       size: 50,
       color: '#E74C3C',
-      name: 'MARS',
+      name: 'BEGINNING',
       title: 'The Work',
-      content: `PROJECT 1: [Your coolest project]\nBuilt/researched/discovered [thing]. Why it matters: [impact].\n\nPROJECT 2: [Second coolest thing]\nThe one where I learned [lesson] the hard way.\n\nPROJECT 3: [Something weird/personal]\nNot everything needs to change the world. Sometimes you just need to know if [random question].\n\nReplace this with YOUR actual projects. Make them stories, not bullet points. Admissions officers are human - bore them and they'll forget you in 10 minutes.`
+      content: `Rogue Planets! I researched what could happen to Earth if one of them got close to Earth with Shrihan Agarwal from the University of Chicago!\n I created 2 sets of simulations in python to do our research. My big takeaway? Learn NVIDIA CUDA (a library to perform simulations in a GPU) before doing such simulations. Even with multi-processing, CPU's are simply hundreds of times slower than GPU's. Even though CUDA is complicated, the range of simulations you can do is insane. If you can't do GPU's and multi-processing, use Cython or Numba, the GOATS of cpu simulations. Anyways, in the project we found that a rogue planet can be quite dangerous if it approaches from certain angles with certain speeds (Yeah, too vague, check my paper out for more details). I'm planning on coding a more detailed simulation, so if you're interested, please keep playing!.\n\nSarac Rocketry\nThe school club where I learned I couldn't code for 48+ hours with 2 hours of sleep and a nuclear amount of caffeine. But we did send 15 kilogram engineering marvels up 1500 meters and land them safely, sooo\n\nI believe knowledge should be free, regardless of language. That's why I used to spend a lot of time translating Wikipedia pages from English to Turkish. Because guess what, the most beautiful Solar System object (psst Iapetus) didn't have a wikipedia page in Turkish, let alone any information about it in the forums.\n So, if you want to contribute to free-knowledge and you happen to know 2 languages, just translate wiki pages. \n\n"Imagine a world in which every single person on the planet is given free access to the sum of all human knowledge" - Jimmy Wales.
     },
     {
       id: 'research',
