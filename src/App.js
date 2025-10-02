@@ -27,6 +27,7 @@ export default function SpacePortfolio() {
   const cameraXRef = useRef(0);
   const rotationRef = useRef(0);
   const lastFrameTime = useRef(0);
+  const textSoundInterval = useRef(null);
   
   // Expanded game world - much wider space (500% of screen width)
   const WORLD_WIDTH = 500;
@@ -199,41 +200,40 @@ export default function SpacePortfolio() {
   }, [gameStarted]);
 
   const handlePlanetClick = (planet) => {
-    const distance = Math.sqrt(
-      Math.pow(playerPos.x - planet.x, 2) + Math.pow(playerPos.y - planet.y, 2)
-    );
+  const distance = Math.sqrt(
+    Math.pow(playerPos.x - planet.x, 2) + Math.pow(playerPos.y - planet.y, 2)
+  );
+  
+  if (distance < 300) {
+    setSelectedPlanet(planet);
     
-    if (distance < 300) {
-      setSelectedPlanet(planet);
-      // Play Undertale-style text beeps
-const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-
-// Create multiple quick beeps for that "talking" effect
-for (let i = 0; i < 3; i++) {
-  setTimeout(() => {
-    const oscillator = audioContext.createOscillator();
-    const gainNode = audioContext.createGain();
+    // Start the continuous talking sound
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
     
-    oscillator.connect(gainNode);
-    gainNode.connect(audioContext.destination);
+    textSoundInterval.current = setInterval(() => {
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      // Random frequency for variety (Sans-style)
+      oscillator.frequency.value = 150 + Math.random() * 100;
+      oscillator.type = 'square';
+      
+      gainNode.gain.setValueAtTime(0.05, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.03);
+      
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 0.03);
+    }, 80); // Beep every 80ms for that talking rhythm
     
-    // Random frequency between 200-400Hz for variety (like Sans)
-    oscillator.frequency.value = 200 + Math.random() * 200;
-    oscillator.type = 'square'; // Square wave for that retro sound
-    
-    gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
-    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.05);
-    
-    oscillator.start(audioContext.currentTime);
-    oscillator.stop(audioContext.currentTime + 0.05);
-  }, i * 60); // 60ms between beeps
-}
-      if (!discoveredPlanets.has(planet.id)) {
-        setDiscoveredPlanets(new Set([...discoveredPlanets, planet.id]));
-        setScore(score + 100);
-      }
+    if (!discoveredPlanets.has(planet.id)) {
+      setDiscoveredPlanets(new Set([...discoveredPlanets, planet.id]));
+      setScore(score + 100);
     }
-  };
+  }
+};
 
   const worldToScreen = (worldX) => {
     return ((worldX - cameraX) / SCREEN_WIDTH) * 100;
