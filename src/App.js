@@ -62,7 +62,7 @@ export default function SpacePortfolio() {
       color: '#9B59B6',
       name: 'indextr',
       title: 'More free knowledge',
-      content: `indextr.com\n\n I started this project because I honestly hated the Turkish-academic system. Yoktez (the government-controlled website that has all published theses\n- [That thing you do at 2am because you can't stop thinking about it]\n\nThe thing about physics is it's not about memorizing formulas. It's about looking at the universe and asking "but WHY though?" \n\nIf you don't have formal research, put what you're CURIOUS about. Genuine curiosity > fake credentials.`
+      content: `indextr.com\n\n I started this project because the Turkish academia searching websites are mostly old, slow, and has a bad ui. But even worse, they are seperated, so you often need to visit multiple websites to find a simple thing.\n That's why I built indextr, a website that merges TRDizin (an academic index for journals), Dergipark (A merged platform for journals, kind of like an index but a little more complicated), and YokTez (A government controlled website with a UI straight out of 90's that has all Turkish master's and doctorate theses).\n\ The project is not done yet, but still open to public. I'm currently improving the search algorithm with AI.\n\n That's it about indextr. Check it out!`
     },
     {
       id: 'about',
@@ -70,9 +70,9 @@ export default function SpacePortfolio() {
       y: 40,
       size: 45,
       color: '#F39C12',
-      name: 'TITAN',
+      name: 'Humans?',
       title: 'The Human Bit',
-      content: `WHO I AM WHEN I'M NOT DOING PHYSICS:\n[Actually interesting things about you]\n\nRANDOM FACTS:\n- [Something weird that makes you memorable]\n- [A failure that taught you something]\n- [Why you actually care about this major]\n\nLook, I could tell you I'm "passionate about learning" and "collaborative team player" but you've read that 10,000 times. \n\nInstead: [something real about why you give a shit about astronomy/physics that isn't just "it's cool"]`
+      content: `RANDOM FACTS:\n- I'm super into drones. Until recently I had an OG DJI Mavic air, but now I'm looking to upgrade into the FPV universe.\n- I love using Python for every project. It's just extremely simple, amazing community and library support, and the ability to write code free of unsolvable bugs. Here's my personal language list:\n Python > Javascript > PHP > C > C++ > Java \n\ \n\n Last coding tip: If you're a 17 year old like me, VIBE CODE! I'm serious. You still need to know your basics in the language you code in, but AI made this stuff so simple it's a disadvantage to not vibe-code in certain projects, especially personal ones. Go with any LLM you want, but personally Claude is my favourite.`
     },
     {
       id: 'contact',
@@ -82,7 +82,7 @@ export default function SpacePortfolio() {
       name: 'ME',
       title: 'Let\'s Talk',
       image: 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663084322984/KRjwkhInksmcbnzV.png',
-      content: `EMAIL: your.email@whatever.com\nGITHUB: github.com/yourusername\n[Other links if relevant]\n\nWant to talk about exoplanets? Dark matter? Why physics is simultaneously the best and most frustrating thing ever? Hit me up.\n\nCurrently working on: [current project/learning]\nAvailable for: [internships/research/collaboration/whatever]\n\nP.S. - If you made it this far, thanks for playing my janky space game. I promise I'm better at physics than I am at game design.`
+      content: `EMAIL: muzaffermahican@gmail.com\nLINKEDIN: linkedin.com/in/muzaffer-mahi-can-130368236/\n\nWant to talk about rogue planets? Dark matter? Why physics is simultaneously the best and most frustrating thing ever? Hit me up.\n\nI'm available for research, internship, or any project you might want to collaborate on.\n\nP.S. - If you made it this far, thanks for playing my janky space game. If you wonder how I made this game, check my github: github.com/muzaffermahi\n `
     }
   ];
 
