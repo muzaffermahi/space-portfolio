@@ -60,9 +60,9 @@ export default function SpacePortfolio() {
       y: 60,
       size: 55,
       color: '#9B59B6',
-      name: 'KEPLER-442b',
-      title: 'Research & Obsessions',
-      content: `CURRENT OBSESSION: [What you're actually into right now]\n\nPAST WORK:\n- [Research experience if you have it]\n- [Independent projects that aren't school assignments]\n- [That thing you do at 2am because you can't stop thinking about it]\n\nThe thing about physics is it's not about memorizing formulas. It's about looking at the universe and asking "but WHY though?" \n\nIf you don't have formal research, put what you're CURIOUS about. Genuine curiosity > fake credentials.`
+      name: 'indextr',
+      title: 'More free knowledge',
+      content: `indextr.com\n\n I started this project because I honestly hated the Turkish-academic system. Yoktez (the government-controlled website that has all published theses\n- [That thing you do at 2am because you can't stop thinking about it]\n\nThe thing about physics is it's not about memorizing formulas. It's about looking at the universe and asking "but WHY though?" \n\nIf you don't have formal research, put what you're CURIOUS about. Genuine curiosity > fake credentials.`
     },
     {
       id: 'about',
