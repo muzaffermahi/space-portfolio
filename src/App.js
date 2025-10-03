@@ -144,7 +144,7 @@ export default function SpacePortfolio() {
     const audio = audioRef.current;
     audio.src = songs.current[currentSongIndex].url;
     audio.loop = true;
-    audio.volume = 0.1; // Tune down the music volume
+    audio.volume = 0.06; // Tune down the music volume
 
     if (isPlaying) {
       audio.play().catch(e => console.error("Error playing audio:", e));
