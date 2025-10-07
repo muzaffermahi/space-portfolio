@@ -353,10 +353,10 @@ export default function SpacePortfolio() {
         ))}
         <div className="z-10 text-center space-y-8">
           <h1 className="text-6xl font-bold text-white mb-4">
-            COSMIC PORTFOLIO
+            Muzaffer Mahi Can
           </h1>
           <p className="text-xl text-gray-300 max-w-2xl mx-auto px-4">
-            Navigate the vast expanse of space. Discover my work hidden among distant worlds.
+            Discover my work in space!
           </p>
           <p className="text-sm text-gray-400">
             Controls: WASD or Arrow Keys to move • Explore right to find planets • Click planets to interact
