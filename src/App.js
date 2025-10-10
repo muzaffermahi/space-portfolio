@@ -356,7 +356,7 @@ export default function SpacePortfolio() {
             Muzaffer Mahi Can
           </h1>
           <p className="text-xl text-gray-300 max-w-2xl mx-auto px-4">
-            Discover my work in space!
+            Discover who I am in space!
           </p>
           <p className="text-sm text-gray-400">
             Controls: WASD or Arrow Keys to move • Explore right to find planets • Click planets to interact
